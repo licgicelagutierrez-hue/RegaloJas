@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para la mejor mamá 💖</title>
+    <!-- Fuentes elegantes e idénticas al diseño premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --rose-gold: #d69b91;
+            --rose-light: #f4dcd8;
+            --rose-deep: #b37367;
+            --gold: #c6a261;
+            --text-dark: #5a4b48;
+            --bg-gradient: linear-gradient(135deg, #ffffff 0%, #f9e6e3 50%, #ecd3ce 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-gradient);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden; /* Evita scrolls incómodos en móvil */
+            position: relative;
+        }
+
+        /* Pantalla Inicial de Regalo (Portada) */
+        .gift-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-gradient);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s;
+            backdrop-filter: blur(10px);
+        }
+
+        .gift-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .gift-envelope {
+            text-align: center;
+            animation: pulse-envelope 3s infinite ease-in-out;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(214, 155, 145, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .gift-icon {
+            margin-bottom: 20px;
+            filter: drop-shadow(0 10px 15px rgba(214, 155, 145, 0.3));
+        }
+
+        .gift-to {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color: var(--rose-deep);
+            margin: 0 0 10px 0;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .open-gift-btn {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #ffffff 0%, #fffaf9 100%);
+            border: 1.5px solid var(--rose-gold);
+            border-radius: 30px;
+            color: var(--rose-deep);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 14px 40px;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 8px 20px rgba(214, 155, 145, 0.2);
+        }
+
+        .open-gift-btn:hover {
+            background: var(--rose-light);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(214, 155, 145, 0.3);
+            border-color: var(--rose-deep);
+        }
+
+        @keyframes pulse-envelope {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Canvas de alta fidelidad para pétalos, corazones y destellos */
+        #petal-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Botón flotante para la música ambiental */
+        .ambient-music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(214, 155, 145, 0.3);
+            border-radius: 30px;
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-dark);
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .ambient-music-toggle.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .ambient-music-toggle:hover {
+            transform: translateY(-2px);
+            border-color: var(--gold);
+            background: #ffffff;
+        }
+
+        /* Tarjeta Principal */
+        .card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            max-width: 410px;
+            width: 90%;
+            margin: 40px auto;
+            padding: 40px 30px;
+            border-radius: 35px;
+            box-shadow: 
+                0 30px 65px rgba(180, 130, 130, 0.18),
+                inset 0 0 0 2px rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255,255,255,0.4);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(20px);
+            display: none; /* Oculto hasta abrir el regalo */
+        }
+
+        .card.show {
+            display: block;
+            animation: fadeInUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .top-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--rose-gold);
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin: 0 0 8px 0;
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            color: var(--gold);
+            margin: 0 0 6px 0;
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: var(--text-dark);
+            margin: 0 0 25px 0;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        /* Contenedor de la foto */
+        .photo-wrapper {
+            position: relative;
+            margin: 0 auto 35px auto;
+            width: 220px;
+            height: 280px;
+        }
+
+        .gold-frame {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 100%;
+            height: 100%;
+            border: 1.5px solid var(--gold);
+            border-radius: 18px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            border: 6px solid #ffffff;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            z-index: 2;
+            transition: transform 0.4s ease;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .photo-wrapper:hover .carousel {
+            transform: scale(1.03) translateY(-3px);
+        }
+
+        .carousel-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .carousel-img.active {
+            opacity: 1;
+        }
+
+        /* Reproductor de Audio Personalizado */
+        .custom-player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            border-radius: 40px;
+            padding: 8px 20px;
+            margin-bottom: 25px;
+            box-shadow: 
+                0 10px 25px rgba(214, 155, 145, 0.12),
+                inset 0 2px 5px rgba(255,255,255,1);
+            border: 1px solid rgba(214, 155, 145, 0.15);
+        }
+
+        .player-btn {
+            background: none;
+            border: none;
+            color: var(--rose-gold);
+            font-size: 18px;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, color 0.3s;
+            padding: 6px;
+        }
+
+        .player-btn:hover { color: var(--gold); }
+        .player-btn:active { transform: scale(0.9); }
+
+        .heart-btn-wrapper {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid var(--rose-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(214, 155, 145, 0.2);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .heart-btn-wrapper:hover {
+            transform: scale(1.1);
+            border-color: var(--rose-gold);
+        }
+
+        .heart-btn-wrapper.playing {
+            animation: pulse-heart 1.2s infinite;
+            background: var(--rose-light);
+            border-color: var(--rose-gold);
+        }
+
+        .heart-icon {
+            color: var(--rose-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .time-display {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            color: #a09492;
+            width: 45px;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .audio-text {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 14.5px;
+            color: var(--text-dark);
+            margin: 0 0 25px 0;
+            opacity: 0.85;
+            line-height: 1.4;
+        }
+
+        /* Botón del Abrazo Virtual */
+        .virtual-hug-btn {
+            background: linear-gradient(135deg, var(--rose-gold) 0%, #e1aaa0 100%);
+            border: none;
+            border-radius: 30px;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 15px 30px;
+            width: 100%;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 8px 25px rgba(214, 155, 145, 0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 1px;
+        }
+
+        .virtual-hug-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(214, 155, 145, 0.5);
+            background: linear-gradient(135deg, #e1aaa0 0%, var(--rose-gold) 100%);
+        }
+
+        .virtual-hug-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Modal/Pantalla Sorpresa del Abrazo Virtual (VERSIÓN ELEGANTE) */
+        .hug-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(90, 75, 72, 0.5);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s ease;
+        }
+
+        .hug-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .hug-modal {
+            background: linear-gradient(to bottom, #ffffff, #fffaf9);
+            width: 85%;
+            max-width: 380px;
+            padding: 45px 35px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(180, 130, 130, 0.25);
+            border: 1px solid rgba(214, 155, 145, 0.4);
+            transform: scale(0.85);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            position: relative;
+        }
+
+        .hug-modal::before {
+            content: '';
+            position: absolute;
+            top: 12px; left: 12px; right: 12px; bottom: 12px;
+            border: 1px solid rgba(198, 162, 97, 0.3);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .hug-overlay.active .hug-modal { transform: scale(1); }
+
+        .modal-decoration {
+            color: var(--gold);
+            font-size: 20px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+            letter-spacing: 5px;
+        }
+
+        .hug-modal-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            color: var(--rose-deep);
+            margin: 0 0 15px 0;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .hug-modal-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-dark);
+            margin: 0 0 15px 0;
+            font-weight: 300;
+        }
+
+        .highlight-text {
+            display: block;
+            margin-top: 15px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 16px;
+            color: var(--rose-gold);
+            font-weight: 600;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            color: var(--gold);
+            margin: 0 0 35px 0;
+            font-weight: 700;
+        }
+
+        .close-hug-btn {
+            position: relative;
+            z-index: 2;
+            background: transparent;
+            border: 1px solid var(--rose-gold);
+            border-radius: 25px;
+            color: var(--rose-deep);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .close-hug-btn:hover {
+            background: var(--rose-light);
+            border-color: var(--rose-deep);
+        }
+
+        @keyframes pulse-heart {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(214, 155, 145, 0.5); }
+            70% { transform: scale(1.12); box-shadow: 0 0 0 12px rgba(214, 155, 145, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(214, 155, 145, 0); }
+        }
+
+        /* Ajustes responsivos para pantallas pequeñas y grandes */
+        @media (max-width: 400px) {
+            .card { padding: 30px 20px; margin: 20px auto; }
+            .photo-wrapper { width: 190px; height: 245px; }
+            .main-title { font-size: 30px; }
+        }
+        @media (min-width: 1024px) {
+            .card { max-width: 430px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla Inicial de Regalo -->
+    <div class="gift-overlay" id="gift-overlay">
+        <div class="gift-envelope">
+            <!-- Icono vectorial de regalo elegante -->
+            <svg class="gift-icon" xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                <rect x="2" y="7" width="20" height="5"></rect>
+                <line x1="12" y1="22" x2="12" y2="7"></line>
+                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+            <h2 class="gift-to">Para Jasmin</h2>
+            <div class="modal-decoration" style="font-size: 14px;">✦ ✧ ✦</div>
+            <button class="open-gift-btn" id="open-gift-btn">Abrir Regalo</button>
+        </div>
+    </div>
+
+    <!-- Música de fondo oculta (Música suave instrumental enviada por ti) -->
+    <audio id="bg-music" loop src="https://d1yei2z3i6k35z.cloudfront.net/17744419/6a10d1ccc445c1.34905105_WhatsAppAudio2026-05-22at5.35.02PM.mpeg"></audio>
+
+    <!-- Botón flotante superior para silenciar/reproducir música de fondo -->
+    <button class="ambient-music-toggle" id="ambient-toggle">
+        <span class="music-wave" id="music-icon-span">🔊</span>
+        <span id="ambient-text">Música</span>
+    </button>
+
+    <!-- Canvas para las animaciones avanzadas en 3D -->
+    <canvas id="petal-canvas"></canvas>
+
+    <!-- Tarjeta Principal -->
+    <div class="card">
+        <h2 class="top-title">Para la mejor mamá</h2>
+        <h1 class="main-title">Jasmin 💖</h1>
+        <p class="subtitle">Gracias por tu amor infinito</p>
+
+        <div class="photo-wrapper">
+            <div class="gold-frame"></div>
+            <!-- Carrusel de Fotos -->
+            <div class="carousel">
+                <img src="https://d1yei2z3i6k35z.cloudfront.net/17744419/6a14c688855892.36725991_WhatsAppImage2026-05-25at4.22.54PM.jpeg" alt="Jasmin foto 1" class="carousel-img active">
+                <img src="https://d1yei2z3i6k35z.cloudfront.net/17744419/6a14c6886ee908.51904166_WhatsAppImage2026-05-25at4.26.06PM.jpeg" alt="Jasmin foto 2" class="carousel-img">
+                <img src="https://d1yei2z3i6k35z.cloudfront.net/17744419/6a14c688855b77.24899517_WhatsAppImage2026-05-25at4.29.00PM.jpeg" alt="Jasmin foto 3" class="carousel-img">
+            </div>
+        </div>
+
+        <!-- Reproductor de voz oculto (Tu NUEVO audio principal en MP4) -->
+        <audio id="real-audio" src="https://d1yei2z3i6k35z.cloudfront.net/17744419/6a14d06cde96b9.69238756_WhatsAppAudio2026-05-25at6.42.35PM.mpeg"></audio>
+
+        <!-- Interfaz del reproductor personalizado estilo Spotify/Premium -->
+        <div class="custom-player">
+            <button class="player-btn" id="play-pause-btn" aria-label="Reproducir">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button class="player-btn" id="rewind-btn" aria-label="Retroceder">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+            </button>
+            
+            <div class="heart-btn-wrapper" id="heart-wrapper">
+                <span class="heart-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </span>
+            </div>
+            
+            <span class="time-display" id="time-display">0:00</span>
+        </div>
+
+        <p class="audio-text">"Escucha, alguien muy especial te dejó un mensajito..."</p>
+
+        <!-- Botón mágico: Abrazo Virtual Minimalista -->
+        <button class="virtual-hug-btn" id="hug-btn">
+            <span>Abrazo Virtual</span>
+        </button>
+    </div>
+
+    <!-- Pantalla Sorpresa del Abrazo Virtual (Diseño Elegante) -->
+    <div class="hug-overlay" id="hug-overlay">
+        <div class="hug-modal">
+            <div class="modal-decoration">✦ ✧ ✦</div>
+            <h2 class="hug-modal-title">Para mi amada Jas</h2>
+            <p class="hug-modal-text">
+                Mi hermosa Jas, gracias no solo por ser la madre más increíble y tierna para nuestro hijo, sino por ser la compañera de vida perfecta. Admiro tu fuerza, tu paciencia y la inmensa luz que traes a nuestro hogar todos los días.<br><br>
+                Eres el pilar de nuestra familia y mi mayor tesoro. Cuidar de nuestro pequeño juntos es mi mayor aventura.<br>
+                <span class="highlight-text">"Nunca olvides lo profundamente amada que eres. Hoy y siempre, mi corazón es tuyo."</span>
+            </p>
+            <p class="signature">Con todo nuestro amor, Brayan y tu pequeño Liam</p>
+            <button class="close-hug-btn" id="close-hug">Guardar este abrazo en el corazón</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('real-audio');
+            const bgMusic = document.getElementById('bg-music');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const rewindBtn = document.getElementById('rewind-btn');
+            const heartWrapper = document.getElementById('heart-wrapper');
+            const timeDisplay = document.getElementById('time-display');
+            
+            const ambientToggle = document.getElementById('ambient-toggle');
+            const musicIconSpan = document.getElementById('music-icon-span');
+            
+            const giftOverlay = document.getElementById('gift-overlay');
+            const openGiftBtn = document.getElementById('open-gift-btn');
+            const mainCard = document.querySelector('.card');
+
+            const hugBtn = document.getElementById('hug-btn');
+            const hugOverlay = document.getElementById('hug-overlay');
+            const closeHugBtn = document.getElementById('close-hug');
+
+            const playIcon = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+            const pauseIcon = `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+
+            // --- Lógica del Carrusel de Fotos ---
+            const carouselImages = document.querySelectorAll('.carousel-img');
+            let currentImageIndex = 0;
+            if (carouselImages.length > 0) {
+                setInterval(() => {
+                    carouselImages[currentImageIndex].classList.remove('active');
+                    currentImageIndex = (currentImageIndex + 1) % carouselImages.length;
+                    carouselImages[currentImageIndex].classList.add('active');
+                }, 3500); // Cambia de foto cada 3.5 segundos
+            }
+
+            // --- Abrir el Regalo e iniciar la experiencia ---
+            openGiftBtn.addEventListener('click', () => {
+                giftOverlay.classList.add('hidden'); 
+                mainCard.classList.add('show'); 
+                ambientToggle.classList.add('visible');
+                
+                // Iniciar música de fondo
+                bgMusic.volume = 0.5;
+                bgMusic.play().catch(e => console.log("Audio play prevented by browser"));
+
+                // Lluvia mágica de pétalos inicial
+                setTimeout(() => { burstParticles(40); }, 400);
+            });
+
+            // --- Control de la Música de Fondo ---
+            ambientToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (bgMusic.paused) {
+                    bgMusic.play();
+                    musicIconSpan.textContent = '🔊';
+                } else {
+                    bgMusic.pause();
+                    musicIconSpan.textContent = '🔇';
+                }
+            });
+
+            // --- Lógica del Reproductor de Voz ---
+            function togglePlay() {
+                if (audio.paused) {
+                    audio.play();
+                    playPauseBtn.innerHTML = pauseIcon;
+                    heartWrapper.classList.add('playing');
+                    // Atenuar la música de fondo para escuchar el mensaje de voz claramente
+                    bgMusic.volume = 0.12; 
+                    burstParticles(35); // Lluvia instantánea
+                } else {
+                    audio.pause();
+                    playPauseBtn.innerHTML = playIcon;
+                    heartWrapper.classList.remove('playing');
+                    bgMusic.volume = 0.5; // Restaurar música de fondo
+                }
+            }
+
+            playPauseBtn.addEventListener('click', togglePlay);
+            heartWrapper.addEventListener('click', togglePlay);
+
+            rewindBtn.addEventListener('click', () => {
+                audio.currentTime = Math.max(0, audio.currentTime - 5);
+            });
+
+            audio.addEventListener('timeupdate', () => {
+                const minutes = Math.floor(audio.currentTime / 60);
+                const seconds = Math.floor(audio.currentTime % 60);
+                timeDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            });
+
+            audio.addEventListener('ended', () => {
+                playPauseBtn.innerHTML = playIcon;
+                heartWrapper.classList.remove('playing');
+                timeDisplay.textContent = '0:00';
+                bgMusic.volume = 0.5; // Restaurar música de fondo
+            });
+
+            // --- Acción de Abrazo Virtual ---
+            hugBtn.addEventListener('click', () => {
+                hugOverlay.classList.add('active');
+                
+                // Disparar tormenta de corazones y destellos
+                for (let i = 0; i < 4; i++) {
+                    setTimeout(() => {
+                        burstParticles(30, true);
+                    }, i * 250);
+                }
+            });
+
+            closeHugBtn.addEventListener('click', () => {
+                hugOverlay.classList.remove('active');
+            });
+
+            // --- Lógica del Canvas 3D (Pétalos, Corazones y Brillos) ---
+            const canvas = document.getElementById('petal-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class Particle {
+                constructor(x, y, isBurst = false, forceType = null) {
+                    this.x = x || Math.random() * canvas.width;
+                    this.y = y || (isBurst ? canvas.height * 0.6 : Math.random() * -canvas.height);
+                    
+                    this.type = forceType || (Math.random() > 0.6 ? 'heart' : (Math.random() > 0.4 ? 'sparkle' : 'petal'));
+                    
+                    this.size = Math.random() * 8 + 6;
+                    this.speedY = Math.random() * 1.2 + 0.6;
+                    this.speedX = (Math.random() - 0.5) * 1.2;
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.spin = (Math.random() - 0.5) * 0.04;
+                    this.tumble = 0;
+                    this.tumbleSpeed = Math.random() * 0.05 + 0.01;
+                    
+                    const colors = {
+                        petal: ['rgba(214, 155, 145, 0.75)', 'rgba(244, 220, 216, 0.85)', 'rgba(235, 185, 177, 0.8)'],
+                        heart: ['rgba(214, 155, 145, 0.95)', 'rgba(224, 115, 137, 0.85)', 'rgba(240, 150, 160, 0.9)'],
+                        sparkle: ['rgba(198, 162, 97, 0.65)', 'rgba(230, 205, 160, 0.85)', 'rgba(212, 175, 55, 0.7)']
+                    };
+                    this.color = colors[this.type][Math.floor(Math.random() * colors[this.type].length)];
+
+                    if (isBurst) {
+                        const speedFactor = this.type === 'sparkle' ? 7 : 4.5;
+                        const angle = Math.random() * Math.PI * 2;
+                        const velocity = Math.random() * speedFactor + 2;
+                        this.speedX = Math.cos(angle) * velocity;
+                        this.speedY = Math.sin(angle) * velocity - 1;
+                    }
+                }
+
+                update() {
+                    this.y += this.speedY;
+                    this.x += Math.sin(this.tumble) * 0.3 + this.speedX;
+                    this.angle += this.spin;
+                    this.tumble += this.tumbleSpeed;
+
+                    if (Math.abs(this.speedX) > 0.5) {
+                        this.speedX *= 0.98;
+                        this.speedY += 0.04; 
+                    }
+
+                    if (this.y > canvas.height + 25) {
+                        this.y = -25;
+                        this.x = Math.random() * canvas.width;
+                        this.speedX = (Math.random() - 0.5) * 1.2;
+                        this.speedY = Math.random() * 1.2 + 0.6;
+                    }
+                }
+
+                draw() {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle);
+                    ctx.scale(Math.abs(Math.sin(this.tumble)), 1);
+
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+
+                    if (this.type === 'petal') {
+                        ctx.moveTo(0, 0);
+                        ctx.bezierCurveTo(-this.size, -this.size, -this.size, -this.size * 2.5, 0, -this.size * 3);
+                        ctx.bezierCurveTo(this.size, -this.size * 2.5, this.size, -this.size, 0, 0);
+                        ctx.fill();
+                    } 
+                    else if (this.type === 'heart') {
+                        const hSize = this.size * 0.8;
+                        ctx.moveTo(0, -hSize * 0.3);
+                        ctx.bezierCurveTo(-hSize * 0.5, -hSize * 1.1, -hSize * 1.5, -hSize * 0.6, -hSize * 1.5, hSize * 0.3);
+                        ctx.bezierCurveTo(-hSize * 1.5, hSize * 1.1, -hSize * 0.7, hSize * 1.8, 0, hSize * 2.5);
+                        ctx.bezierCurveTo(hSize * 0.7, hSize * 1.8, hSize * 1.5, hSize * 1.1, hSize * 1.5, hSize * 0.3);
+                        ctx.bezierCurveTo(hSize * 1.5, -hSize * 0.6, hSize * 0.5, -hSize * 1.1, 0, -hSize * 0.3);
+                        ctx.fill();
+                    } 
+                    else if (this.type === 'sparkle') {
+                        const sSize = this.size * 0.9;
+                        ctx.moveTo(0, -sSize);
+                        ctx.quadraticCurveTo(0, 0, -sSize, 0);
+                        ctx.quadraticCurveTo(0, 0, 0, sSize);
+                        ctx.quadraticCurveTo(0, 0, sSize, 0);
+                        ctx.quadraticCurveTo(0, 0, 0, -sSize);
+                        ctx.fill();
+                    }
+
+                    ctx.restore();
+                }
+            }
+
+            // Partículas de fondo
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle());
+            }
+
+            function burstParticles(count, forceHearts = false) {
+                // Centrar explosión en pantalla
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+
+                for (let i = 0; i < count; i++) {
+                    const type = forceHearts ? (Math.random() > 0.5 ? 'heart' : 'sparkle') : null;
+                    particles.push(new Particle(centerX, centerY, true, type));
+                }
+                
+                setTimeout(() => {
+                    if (particles.length > 50) {
+                        particles = particles.slice(0, 40);
+                    }
+                }, 4000);
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        });
+    </script>
+</body>
+</html>
