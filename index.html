@@ -384,14 +384,14 @@
             transform: translateY(-1px);
         }
 
-        /* Modal/Pantalla Sorpresa del Abrazo Virtual (VERSIÓN ELEGANTE) */
+        /* Modal/Pantalla Sorpresa del Abrazo Virtual (VERSIÓN ELEGANTE OPTIMIZADA MÓVIL) */
         .hug-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(90, 75, 72, 0.5);
+            background: rgba(90, 75, 72, 0.6);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             z-index: 1000;
@@ -401,6 +401,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.6s ease;
+            padding: 15px; /* Evita que toque los bordes del celular */
         }
 
         .hug-overlay.active {
@@ -410,73 +411,99 @@
 
         .hug-modal {
             background: linear-gradient(to bottom, #ffffff, #fffaf9);
-            width: 85%;
+            width: 100%;
             max-width: 380px;
-            padding: 45px 35px;
-            border-radius: 20px;
+            max-height: 90vh; /* No permite que sea más alto que el 90% de la pantalla */
+            padding: 35px 25px 25px 25px;
+            border-radius: 25px;
             text-align: center;
             box-shadow: 0 30px 60px rgba(180, 130, 130, 0.25);
             border: 1px solid rgba(214, 155, 145, 0.4);
             transform: scale(0.85);
             transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.2);
             position: relative;
+            display: flex;
+            flex-direction: column; /* Estructura vertical perfecta */
         }
 
         .hug-modal::before {
             content: '';
             position: absolute;
-            top: 12px; left: 12px; right: 12px; bottom: 12px;
-            border: 1px solid rgba(198, 162, 97, 0.3);
-            border-radius: 12px;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid rgba(198, 162, 97, 0.25);
+            border-radius: 18px;
             pointer-events: none;
+            z-index: 1;
         }
 
         .hug-overlay.active .hug-modal { transform: scale(1); }
 
+        /* Contenedor scrolleable solo para el texto largo */
+        .hug-scroll-container {
+            overflow-y: auto;
+            flex-grow: 1;
+            margin-bottom: 20px;
+            padding-right: 4px;
+            z-index: 2;
+            /* Scrollbar bonita en navegadores modernos */
+            scrollbar-width: thin;
+            scrollbar-color: var(--rose-gold) transparent;
+        }
+
+        .hug-scroll-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .hug-scroll-container::-webkit-scrollbar-thumb {
+            background-color: var(--rose-gold);
+            border-radius: 10px;
+        }
+
         .modal-decoration {
             color: var(--gold);
-            font-size: 20px;
-            margin-bottom: 10px;
+            font-size: 18px;
+            margin-bottom: 8px;
             opacity: 0.8;
             letter-spacing: 5px;
         }
 
         .hug-modal-title {
             font-family: 'Playfair Display', serif;
-            font-size: 26px;
+            font-size: 24px;
             color: var(--rose-deep);
-            margin: 0 0 15px 0;
+            margin: 0 0 12px 0;
             font-weight: 600;
             font-style: italic;
         }
 
         .hug-modal-text {
             font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            line-height: 1.7;
+            font-size: 13.5px;
+            line-height: 1.6;
             color: var(--text-dark);
-            margin: 0 0 15px 0;
+            margin: 0 0 12px 0;
             font-weight: 300;
+            text-align: center;
         }
 
         .highlight-text {
             display: block;
-            margin-top: 15px;
+            margin-top: 12px;
             font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: 16px;
+            font-size: 15px;
             color: var(--rose-gold);
             font-weight: 600;
         }
 
         .signature {
             font-family: 'Dancing Script', cursive;
-            font-size: 28px;
+            font-size: 24px;
             color: var(--gold);
-            margin: 0 0 35px 0;
+            margin: 15px 0 10px 0;
             font-weight: 700;
         }
 
+        /* Botón de cierre posicionado de forma fija al fondo del modal */
         .close-hug-btn {
             position: relative;
             z-index: 2;
@@ -485,13 +512,16 @@
             border-radius: 25px;
             color: var(--rose-deep);
             font-family: 'Montserrat', sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            padding: 10px 25px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 12px 30px;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin: 0 auto;
+            width: fit-content;
+            flex-shrink: 0; /* Asegura que el botón no se encoja */
         }
 
         .close-hug-btn:hover {
@@ -510,6 +540,9 @@
             .card { padding: 30px 20px; margin: 20px auto; }
             .photo-wrapper { width: 190px; height: 245px; }
             .main-title { font-size: 30px; }
+            .hug-modal { padding: 30px 20px 20px 20px; }
+            .hug-modal-title { font-size: 22px; }
+            .hug-modal-text { font-size: 13px; }
         }
         @media (min-width: 1024px) {
             .card { max-width: 430px; }
@@ -563,7 +596,7 @@
             </div>
         </div>
 
-        <!-- Reproductor de voz oculto (Tu NUEVO audio principal en MP4) -->
+        <!-- Reproductor de voz oculto -->
         <audio id="real-audio" src="https://d1yei2z3i6k35z.cloudfront.net/17744419/6a14d06cde96b9.69238756_WhatsAppAudio2026-05-25at6.42.35PM.mpeg"></audio>
 
         <!-- Interfaz del reproductor personalizado estilo Spotify/Premium -->
@@ -592,17 +625,22 @@
         </button>
     </div>
 
-    <!-- Pantalla Sorpresa del Abrazo Virtual (Diseño Elegante) -->
+    <!-- Pantalla Sorpresa del Abrazo Virtual (Optimizado con Scroll Interno) -->
     <div class="hug-overlay" id="hug-overlay">
         <div class="hug-modal">
             <div class="modal-decoration">✦ ✧ ✦</div>
             <h2 class="hug-modal-title">Para mi amada Jas</h2>
-            <p class="hug-modal-text">
-                Mi hermosa Jas, gracias no solo por ser la madre más increíble y tierna para nuestro hijo, sino por ser la compañera de vida perfecta. Admiro tu fuerza, tu paciencia y la inmensa luz que traes a nuestro hogar todos los días.<br><br>
-                Eres el pilar de nuestra familia y mi mayor tesoro. Cuidar de nuestro pequeño juntos es mi mayor aventura.<br>
-                <span class="highlight-text">"Nunca olvides lo profundamente amada que eres. Hoy y siempre, mi corazón es tuyo."</span>
-            </p>
-            <p class="signature">Con todo nuestro amor, Brayan y tu pequeño Liam</p>
+            
+            <!-- Contenedor con scroll para evitar desbordamiento en móviles -->
+            <div class="hug-scroll-container">
+                <p class="hug-modal-text">
+                    Mi hermosa Jas, gracias no solo por ser la madre más increíble y tierna para nuestro hijo, sino por ser la compañera de vida perfecta. Admiro tu fuerza, tu paciencia y la inmensa luz que traes a nuestro hogar todos los días.<br><br>
+                    Eres el pilar de nuestra familia y mi mayor tesoro. Cuidar de nuestro pequeño juntos es mi mayor aventura.<br>
+                    <span class="highlight-text">"Nunca olvides lo profundamente amada que eres. Hoy y siempre, mi corazón es tuyo."</span>
+                </p>
+                <p class="signature">Con todo nuestro amor, Brayan y tu pequeño Liam</p>
+            </div>
+            
             <button class="close-hug-btn" id="close-hug">Guardar este abrazo en el corazón</button>
         </div>
     </div>
